@@ -19,9 +19,9 @@ public class UserOrdersController {
     private RestTemplate restTemplate;
 
     @RequestMapping("/orders/{username}")
-    public List<OrderItem> getOrders(@PathVariable("username") String username) {
+    public List<Item> getOrders(@PathVariable("username") String username) {
 
-        List<OrderItem> orderItems = new ArrayList<>();
+        List<Item> orderItems = new ArrayList<>();
 
         if (username.equals("Cobb")) {
 
@@ -29,19 +29,17 @@ public class UserOrdersController {
                     .getForObject("http://catalog-service/items/", List.class);
 
             if (catalogItems != null) {
-
-                int index = 0;
-                for (Item catalogItem : catalogItems) {
-                    orderItems.add(
-                            new OrderItem("" + index, catalogItem.getName(), "delivering...")
-                    );
-                    index++;
-                }
+                System.out.println("catalogItems="+catalogItems);
             }
 
-            return orderItems;
+            return catalogItems;
         }
 
         return orderItems;
+    }
+
+    @DeleteMapping("/orders/remove/{partId}")
+    public void removeOrder(@PathVariable("partId") String partId) {
+        System.out.println("Order " + partId + "removed");
     }
 }
