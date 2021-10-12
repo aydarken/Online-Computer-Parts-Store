@@ -19,7 +19,7 @@ public class UserAuthorizationController {
     public void authorizeUser(@PathVariable("username") String username, @PathVariable("password")  String password) {
 
         RegisteredUsers registeredUsers = restTemplate
-                .getForObject("http://localhost:8081/registration/registered_users", RegisteredUsers.class);
+                .getForObject("http://user-registration-service/registration/registered_users", RegisteredUsers.class);
 
         if (registeredUsers != null) {
 
