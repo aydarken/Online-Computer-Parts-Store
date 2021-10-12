@@ -16,7 +16,7 @@ public class UserRefundController {
     @Autowired
     private RestTemplate restTemplate;
 
-    @RequestMapping("/{username}/{partId}")
+       @RequestMapping("/{username}/{partId}")
     public void refundOrder(
             @PathVariable String username,
             @PathVariable String partId
@@ -24,15 +24,12 @@ public class UserRefundController {
 
         if (username.equals("Cobb")) {
             List<OrderItem> orderedItems = restTemplate
-                    .getForObject("http://localhost:8083/orders/" + username, List.class);
+                    .getForObject("http://user-orders-service/user-orders/orders/" + username, List.class);
 
             if (orderedItems != null) {
-                for (OrderItem orderItem : orderedItems) {
-                    if (partId.equals(orderItem.getOrderId())) {
-                        restTemplate.delete("http://localhost:8083/orders/remove/" + partId);
-                    }
-                }
+                restTemplate.delete("http://user-orders-service/user-orders/orders/remove/" + partId);
             }
+
         }
     }
 }
