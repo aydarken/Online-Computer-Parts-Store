@@ -26,7 +26,7 @@ public class UserOrdersController {
         if (username.equals("Cobb")) {
 
             List<Item> catalogItems = restTemplate
-                    .getForObject("http://localhost:8086/items/", List.class);
+                    .getForObject("http://catalog-service/items/", List.class);
 
             if (catalogItems != null) {
 
