@@ -10,9 +10,13 @@ Aidarken Nurbek
 Kurmambayev Anuar
 
 2) Theme 
+
 Online Computer Parts Store
+
 3) Functionalities
+
 Online ordering
+
 4) Microservices
  1) User Registration
  2) User Authorization
@@ -20,6 +24,7 @@ Online ordering
  4) Computer Part Refund
  5) Computer Part Checkout
  6) User Orders
+
 5) About Microservices
  1) Registration is done to add to the database, then for authorization to place an order Anuar;
  2) Viewing the catalog is needed to select an order, placing an order is needed in order to pick up the product Nurbek;
