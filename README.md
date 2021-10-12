@@ -9,15 +9,11 @@ Aidarken Nurbek
 
 Kurmambayev Anuar
 
-2) Theme 
+2) Theme:Online Computer Parts Store;
 
-Online Computer Parts Store
+3) Functionalities:Online ordering;
 
-3) Functionalities
-
-Online ordering
-
-4) Microservices
+4) Microservices:
  1) User Registration
  2) User Authorization
  3) Computer Parts Catalog
