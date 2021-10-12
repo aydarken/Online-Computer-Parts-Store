@@ -5,17 +5,18 @@ Sample Online Computer Parts Store implemented by microservices architecture
 Seisenbek Arman;
 Aidarken Nurbek;
 Kurmambayev Anuar;
+
 2) Theme:Online Computer Parts Store;
 
 3) Functionalities:Online ordering;
 
 4) Microservices:
- 1) User Registration;
- 2) User Authorization;
- 3) Computer Parts Catalog;
- 4) Computer Part Refund;
- 5) Computer Part Checkout;
- 6) User Orders;
+ a) User Registration;
+ b) User Authorization;
+ c) Computer Parts Catalog;
+ d) Computer Part Refund;
+ e) Computer Part Checkout;
+ f) User Orders;
 
 5) About Microservices
  1) Registration is done to add to the database, then for authorization to place an order Anuar;
