@@ -3,6 +3,7 @@ package com.devteam.userordersservice.controller;
 import com.devteam.userordersservice.model.Item;
 import com.devteam.userordersservice.model.OrderItem;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -25,8 +26,7 @@ public class UserOrdersController {
 
         if (username.equals("Cobb")) {
 
-            List<Item> catalogItems = restTemplate
-                    .getForObject("http://catalog-service/items/", List.class);
+            List<Item> catalogItems = restTemplate.getForObject("http://catalog-service/items/", List.class);
 
             if (catalogItems != null) {
                 System.out.println("catalogItems="+catalogItems);
