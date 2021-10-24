@@ -1,11 +1,16 @@
 package javaee.catalog.models;
 
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.ToString;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
+@Data
 @Entity
-
 public class Item {
 
     private @Id @GeneratedValue Long id;
@@ -23,30 +28,6 @@ public class Item {
         this.name = name;
         this.description = description;
         this.price = price;
-    }
-
-    public Long getId() {
-        return this.id;
-    }
-
-    public String getName() {
-        return this.name;
-    }
-
-    public String getDescription() {
-        return this.description;
-    }
-
-    public double getPrice() {
-        return this.price;
-    }
-
-    @Override
-    public String toString() {
-        return "Item{" + "id=" + this.id +
-            ", name=" + this.name +
-            ", description=" + this.description +
-            ", price=" + this.price + "}";
     }
 
 }
