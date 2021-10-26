@@ -1,5 +1,11 @@
 package com.devteam.userordersservice.model;
 
+
+import lombok.Getter;
+import lombok.Setter;
+
+@Setter
+@Getter
 public class Item {
 
     private String name;
@@ -10,11 +16,4 @@ public class Item {
         this.name = name;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
 }
