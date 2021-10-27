@@ -29,11 +29,13 @@
 			<scope>test</scope>
 		</dependency>
 
+		<!--	Eureka client dependencies	-->
 		<dependency>
 			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
 		</dependency>
 
+		<!--	Lombok dependencies	-->
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
@@ -41,6 +43,7 @@
 			<scope>provided</scope>
 		</dependency>
 
+		<!-- Swagger2 dependencies -->
 		<dependency>
 			<groupId>io.springfox</groupId>
 			<artifactId>springfox-swagger2</artifactId>
@@ -51,6 +54,19 @@
 			<groupId>io.springfox</groupId>
 			<artifactId>springfox-swagger-ui</artifactId>
 			<version>2.9.2</version>
+		</dependency>
+
+		<!--	Hystrix Dependencies	-->
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-netflix-hystrix</artifactId>
+			<version>2.2.7.RELEASE</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-hystrix-dashboard</artifactId>
+			<version>1.4.7.RELEASE</version>
 		</dependency>
 
 	</dependencies>
