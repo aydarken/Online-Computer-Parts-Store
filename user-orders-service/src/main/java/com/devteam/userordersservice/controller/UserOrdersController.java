@@ -2,6 +2,7 @@ package com.devteam.userordersservice.controller;
 
 import com.devteam.userordersservice.model.Item;
 import com.devteam.userordersservice.model.OrderItem;
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,6 +21,7 @@ public class UserOrdersController {
     private RestTemplate restTemplate;
 
     @RequestMapping("/orders/{username}")
+    @HystrixCommand(fallbackMethod = "OrdersFallback")
     public List<Item> getOrders(@PathVariable("username") String username) {
 
         List<Item> orderItems = new ArrayList<>();
@@ -37,9 +39,17 @@ public class UserOrdersController {
 
         return orderItems;
     }
+    public void OrdersFallback(String username) {
+        System.out.println("User orders is not available");
+    }
 
     @DeleteMapping("/orders/remove/{partId}")
+    @HystrixCommand(fallbackMethod = "removeOrderFallback")
     public void removeOrder(@PathVariable("partId") String partId) {
         System.out.println("Order " + partId + "removed");
     }
+    public void removeOrderFallback(String username) {
+        System.out.println("User orders is not available. Your order will remove soon!");
+    }
+
 }

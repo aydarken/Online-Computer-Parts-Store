@@ -1,6 +1,8 @@
 package com.devteam.userrefundservice.controller;
 
 import com.devteam.userrefundservice.model.OrderItem;
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixProperty;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,7 +18,15 @@ public class UserRefundController {
     @Autowired
     private RestTemplate restTemplate;
 
-       @RequestMapping("/{username}/{partId}")
+    @RequestMapping("/{username}/{partId}")
+    @HystrixCommand(
+            fallbackMethod = "refundOrderFallback",
+            threadPoolKey = "refundOrder",
+            threadPoolProperties = {
+                    @HystrixProperty(name = "coreSize", value = "100"),
+                    @HystrixProperty(name = "maxQueueSize", value = "50"),
+            }
+    )
     public void refundOrder(
             @PathVariable String username,
             @PathVariable String partId
@@ -31,5 +41,9 @@ public class UserRefundController {
             }
 
         }
+    }
+
+    public void refundOrderFallback(String username, String partId){
+        System.out.println("User orders is not available");
     }
 }
