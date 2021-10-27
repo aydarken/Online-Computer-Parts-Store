@@ -3,7 +3,7 @@ Sample Online Computer Parts Store implemented by microservices architecture
 
 1)Team:
 Seisenbek Arman;
-Aidarken Nurbek;
+Aidarken Nurbek(aydarken, Yerkanat01 my account for local git);
 Kurmambayev Anuar;
 
 2) Theme:Online Computer Parts Store;
