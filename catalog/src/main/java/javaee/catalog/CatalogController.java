@@ -1,6 +1,7 @@
 package javaee.catalog;
 
 import java.util.List;
+import java.util.ArrayList;
 
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,17 +24,11 @@ public class CatalogController {
 
 
     @GetMapping("/")
-    @HystrixCommand(fallbackMethod = "catalogFullback")
     public List<Item> all() {
         return repository.findAll();
     }
 
-    public void catalogFullback(String name, double price) {
-        System.out.println("User not chosen");
-    }
-
     @GetMapping("/{id}")
-    @HystrixCommand(fallbackMethod = "catalogFullback")
     public Item one(@PathVariable Long id) {
         return repository.findById(id).get();
     }

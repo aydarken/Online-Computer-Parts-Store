@@ -21,19 +21,14 @@ public class CheckoutController {
     private CatalogService catalogService;
 
     @GetMapping("/{id}/{amount}")
-    @HystrixCommand(
-            fallbackMethod = "getBookInformationByIdFallback",
-            threadPoolKey = "getBookInformationById",
-            threadPoolProperties = {
-                    @HystrixProperty(name = "coreSize", value = "100"),
-                    @HystrixProperty(name = "maxQueueSize", value = "50"),
-            })
+    @HystrixCommand(fallbackMethod = "catalogFallBack")
     public double purchase(@PathVariable Long id, @PathVariable Long amount) {
         Item item = catalogService.getOneItem(id);
         return item.price * amount;
     }
 
-    public void catalogFallBack(String name, double price) {
+    public double catalogFallBack(Long id, Long amount) {
         System.out.println("Nothing");
+        return 0.0;
     }
 }

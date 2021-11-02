@@ -1,0 +1,6 @@
+javaee/catalog/CatalogApplication.class
+javaee/catalog/DbSeeder.class
+javaee/catalog/config/SwaggerConfig.class
+javaee/catalog/models/Item.class
+javaee/catalog/CatalogController.class
+javaee/catalog/repositories/ItemRepository.class
