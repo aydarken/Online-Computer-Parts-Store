@@ -7,9 +7,11 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.web.client.RestTemplate;
 import javaee.checkout.services.CatalogService;
 import javaee.checkout.services.impl.CatalogServiceImpl;
+import org.springframework.cloud.netflix.hystrix.EnableHystrix;
 
 @SpringBootApplication
 @EnableEurekaClient
+@EnableHystrix
 public class CheckoutApplication {
 
 	public static void main(String[] args) {
