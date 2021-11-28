@@ -4,7 +4,9 @@ import com.devteam.userregistrationservice.service.UserRegistrationService;
 import com.devteam.userregistrationservice.service.UserRegistrationServiceImpl;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cloud.client.circuitbreaker.EnableCircuitBreaker;
 import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
+import org.springframework.cloud.netflix.hystrix.dashboard.EnableHystrixDashboard;
 import org.springframework.context.annotation.Bean;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 import org.springframework.cloud.netflix.hystrix.EnableHystrix;
@@ -13,6 +15,8 @@ import org.springframework.cloud.netflix.hystrix.EnableHystrix;
 @EnableEurekaClient
 @EnableSwagger2
 @EnableHystrix
+@EnableHystrixDashboard
+@EnableCircuitBreaker
 public class UserRegistrationServiceApplication {
 
 	public static void main(String[] args) {
