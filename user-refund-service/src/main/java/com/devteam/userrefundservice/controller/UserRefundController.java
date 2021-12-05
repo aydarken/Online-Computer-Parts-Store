@@ -32,7 +32,6 @@ public class UserRefundController {
             @PathVariable String partId
     ) {
 
-        if (username.equals("Cobb")) {
             List<OrderItem> orderedItems = restTemplate
                     .getForObject("http://user-orders-service/user-orders/orders/" + username, List.class);
 
@@ -41,7 +40,6 @@ public class UserRefundController {
             }
 
         }
-    }
 
     public void refundOrderFallback(String username, String partId){
         System.out.println("User orders is not available");
