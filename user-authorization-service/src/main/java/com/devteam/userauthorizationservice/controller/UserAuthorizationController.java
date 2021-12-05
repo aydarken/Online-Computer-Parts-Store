@@ -1,65 +1,54 @@
 package com.devteam.userauthorizationservice.controller;
 
-import com.devteam.userauthorizationservice.model.RegisteredUser;
-import com.devteam.userauthorizationservice.model.RegisteredUsers;
+import com.devteam.userauthorizationservice.model.AuthenticationRequest;
+import com.devteam.userauthorizationservice.model.AuthenticationResponse;
+import com.devteam.userauthorizationservice.service.UserDetailsServiceImpl;
+import com.devteam.userauthorizationservice.util.JwtUtil;
 
 import org.springframework.beans.factory.annotation.Autowired;
-
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.client.RestTemplate;
-
-import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
-import com.netflix.hystrix.contrib.javanica.annotation.HystrixProperty;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("authorization")
 public class UserAuthorizationController {
 
-    @Autowired
-    public RestTemplate restTemplate;
+    @Autowired private AuthenticationManager authenticationManager;
+    @Autowired private UserDetailsServiceImpl userDetailsService;
+    @Autowired private JwtUtil jwtUtil;
 
-    @RequestMapping("/authorize/{username}/{password}")
-    @HystrixCommand(
-            fallbackMethod = "authorizeUserFallback",
-            threadPoolKey = "authorizeUser",
-            threadPoolProperties = {
-                    @HystrixProperty(name="coreSize", value="100"),
-                    @HystrixProperty(name="maxQueueSize", value="50"),
-            }
-    )
-    public void authorizeUser(@PathVariable("username") String username, @PathVariable("password")  String password) {
+    @RequestMapping("/hello")
+    public String hello() {
+        return "Hello world";
+    }
 
-        RegisteredUsers registeredUsers = restTemplate
-                .getForObject("http://user-registration-service/registration/registered_users", RegisteredUsers.class);
+    @RequestMapping(value = "/authorize", method = RequestMethod.POST)
+    public ResponseEntity<?> createAuthorizationToken(
+        @RequestBody AuthenticationRequest authenticationRequest
+    ) throws Exception {
 
-        if (registeredUsers != null) {
-
-            boolean isAuthorized = false;
-
-            for (RegisteredUser registeredUser : registeredUsers.getRegisteredUserList()) {
-
-                if (username.equals(registeredUser.getUsername())
-                        && password.equals(registeredUser.getPassword())) {
-                    isAuthorized = true;
-                    break;
-                }
-
-            }
-
-            if (isAuthorized) {
-                System.out.println("Successfully authorized!");
-            } else {
-                System.out.println("Username or password is wrong!");
-            }
-        } else {
-            System.out.println("There is no registered users!");
+        try {
+            authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(
+                            authenticationRequest.getEmail(),
+                            authenticationRequest.getPassword()
+                    )
+            );
+        } catch (BadCredentialsException e) {
+            throw new Exception("Incorrect email or password", e);
         }
 
+        final UserDetails userDetails = userDetailsService
+                .loadUserByUsername(authenticationRequest.getEmail());
+
+        final String jwt = jwtUtil.generateToken(userDetails);
+
+        return ResponseEntity.ok(new AuthenticationResponse(jwt));
+
     }
 
-    public void authorizeUserFallback(String username, String password) {
-        System.out.println("User not authorized: Service Unavailable");
-    }
 }

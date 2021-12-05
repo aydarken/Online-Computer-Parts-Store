@@ -1,44 +1,33 @@
 package com.devteam.userregistrationservice.controller;
 
-import com.devteam.userregistrationservice.model.RegisteredUser;
-import com.devteam.userregistrationservice.model.RegisteredUsers;
-import com.devteam.userregistrationservice.service.UserRegistrationService;
+import com.devteam.userregistrationservice.model.UserEntity;
+import com.devteam.userregistrationservice.service.UserService;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 
-import java.util.ArrayList;
-
 @RestController
-@RequestMapping("registration")
+@RequestMapping("/registration")
 public class UserRegistrationController {
 
-    @Autowired
-    UserRegistrationService userRegistrationService;
+    @Autowired private UserService userService;
 
-    @RequestMapping("/register/{username}/{password}")
+    @RequestMapping(value = "/register", method = RequestMethod.POST)
     @HystrixCommand(fallbackMethod = "registerUserFallback")
-    public void registerUser(@PathVariable("username") String username, @PathVariable("password") String password) {
-        userRegistrationService.registerUser(username, password);
+    public ResponseEntity registration(@RequestBody UserEntity user) {
+        try {
+            userService.registration(user);
+            return ResponseEntity.ok("User successfully registered!");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
-    public void registerUserFallback(String username, String password) {
-        System.out.println("User not registered: Service Unavailable");
+    public ResponseEntity registerUserFallback(UserEntity user) {
+        return ResponseEntity.badRequest().body("Service is not available");
     }
-
-    @GetMapping("/registered_users")
-    @HystrixCommand(fallbackMethod = "getAllRegisteredUsersFallback")
-    public RegisteredUsers getAllRegisteredUsers() {
-        return new RegisteredUsers(userRegistrationService.getAllRegisteredUsers());
-    }
-
-    public RegisteredUsers getAllRegisteredUsersFallback() {
-        return new RegisteredUsers(new ArrayList<RegisteredUser>());
-    }
-
 
 
 }
