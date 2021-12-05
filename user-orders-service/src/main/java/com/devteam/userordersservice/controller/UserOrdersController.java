@@ -52,8 +52,8 @@ public class UserOrdersController {
 
     @DeleteMapping("/orders/remove/{partId}")
     @HystrixCommand(fallbackMethod = "removeOrderFallback")
-    public void removeOrder(@PathVariable("partId") String partId) {
-        System.out.println("Order " + partId + "removed");
+    public void removeOrder(@PathVariable("partId") Long partId) {
+        userOrdersService.deleteOrder(partId);
     }
     public void removeOrderFallback(String username) {
         System.out.println("User orders is not available. Your order will remove soon!");
