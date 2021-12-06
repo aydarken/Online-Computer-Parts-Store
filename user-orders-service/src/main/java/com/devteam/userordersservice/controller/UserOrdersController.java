@@ -1,14 +1,11 @@
 package com.devteam.userordersservice.controller;
 
-import com.devteam.userordersservice.model.OrderItem;
-import com.devteam.userordersservice.service.UserOrdersService;
-import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
+import com.devteam.userordersservice.model.Order;
+import com.devteam.userordersservice.repository.OrderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
-
-import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/user-orders")
@@ -18,45 +15,39 @@ public class UserOrdersController {
     private RestTemplate restTemplate;
 
     @Autowired
-    private UserOrdersService userOrdersService;
+    private OrderRepository orderRepository;
 
-    @GetMapping("/orders/{userid}")
-    @HystrixCommand(fallbackMethod = "OrdersFallback")
-    public List<Optional<OrderItem>> getOrders(@PathVariable("userid") Long userid) {
+    // TODO: move logic into OrderService
+    @PostMapping("/add/{userEmail}/{itemId}")
+    public ResponseEntity<?> addOrder(
+        @PathVariable("userEmail") String userEmail,
+        @PathVariable("itemId") Long itemId
+    ) {
+        try {
 
-        List<Optional<OrderItem>> orderItems = userOrdersService.getAllOrdersOfUser(userid);
+            Order order = new Order();
+            order.setEmail(userEmail);
+            order.setItemId(itemId);
 
-        List catalogItems = restTemplate.getForObject("http://catalog-service/items/", List.class);
+            orderRepository.save(order);
 
-        if (catalogItems != null) {
-            System.out.println("catalogItems="+catalogItems);
+            return ResponseEntity.ok("Item " + itemId + " added to order successfully!");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
-
-        return orderItems;
     }
 
-
-    public void OrdersFallback(String username) {
-        System.out.println("User orders is not available");
+    @RequestMapping(value = "/all/{userEmail}", method = RequestMethod.GET)
+    public ResponseEntity<?> getByUser(
+            @PathVariable("userEmail") String userEmail
+    ) {
+        try {
+            return ResponseEntity.ok(orderRepository.findOrdersByEmail(userEmail));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
-    @PostMapping("/orders/")
-    @HystrixCommand(fallbackMethod = "addOrderFallback")
-    public void addOrder(@RequestBody OrderItem orderItem) {
-        userOrdersService.addUser(orderItem);
-    }
-
-    public void addOrderFallback(OrderItem orderItem){
-        System.out.println("Service now is not available");
-    }
-
-    @DeleteMapping("/orders/remove/{partId}")
-    @HystrixCommand(fallbackMethod = "removeOrderFallback")
-    public void removeOrder(@PathVariable("partId") Long partId) {
-        userOrdersService.deleteOrder(partId);
-    }
-    public void removeOrderFallback(String username) {
-        System.out.println("User orders is not available. Your order will remove soon!");
-    }
 
 }
+
