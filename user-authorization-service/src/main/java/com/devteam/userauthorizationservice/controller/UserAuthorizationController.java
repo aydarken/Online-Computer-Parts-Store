@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.annotation.CurrentSecurityContext;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
@@ -49,6 +50,17 @@ public class UserAuthorizationController {
 
         return ResponseEntity.ok(new AuthenticationResponse(jwt));
 
+    }
+
+    @GetMapping("/authorized_user")
+    public ResponseEntity<?> getUserEmail(
+            @CurrentSecurityContext(expression="authentication?.name") String username
+    ) {
+        try {
+            return ResponseEntity.ok(username);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
 }
