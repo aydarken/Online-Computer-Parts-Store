@@ -1,5 +1,3 @@
-package javaee.checkout;
-
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import springfox.documentation.builders.PathSelectors;
@@ -16,7 +14,7 @@ public class CheckoutConfig {
     public Docket api() {
         return new Docket(DocumentationType.SWAGGER_2)
                 .select()
-                .apis(RequestHandlerSelectors.any())
+                .apis(RequestHandlerSelectors.basePackage("javaee.checkout.controller"))
                 .paths(PathSelectors.any())
                 .build();
     }
